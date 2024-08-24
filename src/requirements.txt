@@ -19,3 +19,4 @@ python-dotenv==1.0.1
 tomli==2.0.1
 Werkzeug==3.0.2
 zipp==3.18.1
+google-cloud-secret-manager==2.20.2

@@ -3,7 +3,7 @@
 import os
 import datetime
 from flask import Flask, render_template, request, redirect, url_for
-
+from google.cloud import secretmanager
 # from markupsafe import escape
 import pymongo
 from dotenv import load_dotenv
@@ -27,8 +27,21 @@ bcrypt = Bcrypt(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+
+def access_secret_version(project_id, secret_id, version_id="latest"):
+    client = secretmanager.SecretManagerServiceClient()
+    name = f"projects/{project_id}/secrets/{secret_id}/versions/{version_id}"
+    response = client.access_secret_version(request={"name": name})
+    return response.payload.data.decode("UTF-8")
+
+# Replace with your actual Google Cloud project ID and secret name
+project_id = "campusswap-433513"
+secret_id = "MONGO_URI"
+
+# Access the MongoDB URI from Secret Manager
+mongo_uri = access_secret_version(project_id, secret_id)
 # if using Atlas database uncomment next line!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! and comment out the next four lines
-client = MongoClient(os.getenv("MONGO_URI"), server_api=ServerApi('1'))
+client = MongoClient(mongo_uri, server_api=ServerApi('1'))
  
 #if using containerized instance of mongo uncomment next 4 lines else comment them out
 #root_username = os.environ["MONGO_INITDB_ROOT_USERNAME"]  #1
@@ -510,8 +523,8 @@ def unauthorized_handler():
 # run the app
 if __name__ == "__main__":
     # use the PORT environment variable, or default to 5000
-    FLASK_PORT = os.getenv("FLASK_PORT", "5001")
+   
 
     # import logging
     # logging.basicConfig(filename='/home/ak8257/error.log',level=logging.DEBUG)
-    app.run(host="0.0.0.0", port=FLASK_PORT)
+    app.run(host="0.0.0.0", port=8080)
