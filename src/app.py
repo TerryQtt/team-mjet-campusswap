@@ -12,7 +12,8 @@ from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from bson.decimal128 import Decimal128
 from bson.objectid import ObjectId  # used to search db using objec ids
-
+from pymongo.mongo_client import MongoClient
+from pymongo.server_api import ServerApi
 # load credentials and configuration options from .env file
 # if you do not yet have a file named .env, make one based on the template in env.example
 load_dotenv()  # take environment variables from .env.
@@ -27,13 +28,13 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 
 # if using Atlas database uncomment next line!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! and comment out the next four lines
-#client = pymongo.MongoClient(os.getenv("MONGO_URI"))
+client = MongoClient(os.getenv("MONGO_URI"), server_api=ServerApi('1'))
  
 #if using containerized instance of mongo uncomment next 4 lines else comment them out
-root_username = os.environ["MONGO_INITDB_ROOT_USERNAME"]  #1
-root_password = os.environ["MONGO_INITDB_ROOT_PASSWORD"]  #2
-uri = f"mongodb://{root_username}:{root_password}@mongodb:27017/db?authSource=admin" #3
-client = pymongo.MongoClient(uri) #4
+#root_username = os.environ["MONGO_INITDB_ROOT_USERNAME"]  #1
+#root_password = os.environ["MONGO_INITDB_ROOT_PASSWORD"]  #2
+#ri = f"mongodb://{root_username}:{root_password}@mongodb:27017/db?authSource=admin" #3
+#client = pymongo.MongoClient(uri) #4
 
 db = client['Cluster0']  # store a reference to the database
 
