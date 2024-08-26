@@ -7,7 +7,7 @@ Based on our second project, the new and revised CampusSwap implements several n
 
 # Website
 
-Check out our web app using this [link](http://157.230.52.22/)
+Check out our web app using this [link](https://campusswap-afabg3u3oq-uc.a.run.app)
 
 # New Features
 
